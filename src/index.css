@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+  --color-nest-950: #16302a;
+  --color-nest-900: #1e3b34;
+  --color-nest-800: #29493f;
+  --color-nest-700: #355a4e;
+  --color-nest-600: #4a7364;
+  --color-nest-300: #a8c3b7;
+  --color-nest-100: #e3eee8;
+  --color-sand-100: #fbf4ec;
+  --color-sand-300: #f6d6b6;
+  --color-sand-400: #f3bb8a;
+  --color-sand-500: #ea9f61;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-nest-700);
+  color: var(--color-sand-100);
+}
