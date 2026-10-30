@@ -6,6 +6,7 @@ import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
 import type { Role } from "../types"
+import AdminUsers from "../pages/AdminUsers"
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -51,12 +52,19 @@ function Router() {
           }
         />
 
-        {/* ADMIN පමණයි */}
         <Route
           path="/admin"
           element={
             <RequireAuth roles={["ADMIN"]}>
               <AdminPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <RequireAuth roles={["ADMIN"]}>
+              <AdminUsers />
             </RequireAuth>
           }
         />
