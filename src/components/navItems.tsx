@@ -24,12 +24,12 @@ export const navItems: Record<Role, NavItem[]> = {
   ADMIN: [
     { to: "/admin", label: "Dashboard", icon: DashboardIcon, end: true },
     { to: "/admin/users", label: "Users", icon: UsersIcon },
-    { to: "/admin/boardings", label: "Boardings", icon: BuildingIcon, soon: true },
-    { to: "/admin/campuses", label: "Campuses", icon: CapIcon, soon: true }
+    { to: "/admin/boardings", label: "Boardings", icon: BuildingIcon },
+    { to: "/admin/campuses", label: "Campuses", icon: CapIcon }
   ],
   OWNER: [
     { to: "/", label: "Home", icon: HomeIcon, end: true },
-    { to: "/owner/boardings", label: "My boardings", icon: BuildingIcon, soon: true },
+    { to: "/owner/boardings", label: "My boardings", icon: BuildingIcon},
     { to: "/owner/bookings", label: "Booking requests", icon: CalendarIcon, soon: true }
   ],
   STUDENT: [

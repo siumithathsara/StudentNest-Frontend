@@ -50,4 +50,59 @@ export interface AdminStats {
     students: number
     owners: number
   }
+  boardings: { total: number; pending: number; approved: number; rejected: number }
+  campuses: number
+}
+
+export interface Campus {
+  id: string
+  name: string
+  city: string
+  lat: number
+  lng: number
+}
+
+export interface NearbyCampus {
+  id: string
+  name: string
+  city: string
+  distanceKm: number
+  walkMinutes: number
+  vehicleMinutes: number
+}
+
+export interface PlaceResult {
+  name: string
+  lat: number
+  lng: number
+  city: string
+}
+
+export type BoardingStatus = "PENDING" | "APPROVED" | "REJECTED"
+
+export interface BoardingImage {
+  url: string
+  path: string
+}
+
+export interface Boarding {
+  id: string
+  title: string
+  description: string
+  city: string
+  address: string
+  monthlyRent: number
+  totalRooms: number
+  availableRooms: number
+  facilities: string[]
+  lat: number
+  lng: number
+  images: BoardingImage[]
+  status: BoardingStatus
+  rejectionReason?: string
+  createdAt: string
+}
+
+export interface AdminBoarding extends Boarding {
+  owner: { id: string; name: string; email: string; phone?: string } | null
 }

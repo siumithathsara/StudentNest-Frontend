@@ -1,4 +1,4 @@
-import type { AdminStats, ManagedUser, UserStatus } from "../types"
+import type { AdminBoarding, AdminStats, BoardingStatus, ManagedUser, UserStatus } from "../types"
 import api from "./api"
 
 export const getStats = async () => {
@@ -16,5 +16,18 @@ export const setUserStatus = async (
   body: { status: "APPROVED" | "REJECTED" | "SUSPENDED"; reason?: string }
 ) => {
   const res = await api.patch(`/admin/users/${id}/status`, body)
+  return res.data
+}
+
+export const getBoardings = async (params: { status?: BoardingStatus; page: number; limit: number }) => {
+  const res = await api.get("/admin/boardings", { params })
+  return res.data.data as { items: AdminBoarding[]; total: number; page: number; limit: number }
+}
+
+export const setBoardingStatus = async (
+  id: string,
+  body: { status: "APPROVED" | "REJECTED"; reason?: string }
+) => {
+  const res = await api.patch(`/admin/boardings/${id}/status`, body)
   return res.data
 }

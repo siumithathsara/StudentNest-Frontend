@@ -7,6 +7,10 @@ import Login from "../pages/Login"
 import Register from "../pages/Register"
 import type { Role } from "../types"
 import AdminUsers from "../pages/AdminUsers"
+import AdminBoardings from "../pages/AdminBoardings"
+import AdminCampuses from "../pages/AdminCampuses"
+import BoardingForm from "../pages/BoardingForm"
+import MyBoardings from "../pages/MyBoardings"
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -65,6 +69,47 @@ function Router() {
           element={
             <RequireAuth roles={["ADMIN"]}>
               <AdminUsers />
+            </RequireAuth>
+          }
+        />
+                <Route
+          path="/admin/boardings"
+          element={
+            <RequireAuth roles={["ADMIN"]}>
+              <AdminBoardings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin/campuses"
+          element={
+            <RequireAuth roles={["ADMIN"]}>
+              <AdminCampuses />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/owner/boardings"
+          element={
+            <RequireAuth roles={["OWNER"]}>
+              <MyBoardings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/owner/boardings/new"
+          element={
+            <RequireAuth roles={["OWNER"]}>
+              <BoardingForm />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/owner/boardings/:id/edit"
+          element={
+            <RequireAuth roles={["OWNER"]}>
+              <BoardingForm />
             </RequireAuth>
           }
         />

@@ -1,0 +1,1 @@
+export const formatRent = (n: number) => `Rs. ${n.toLocaleString("en-US")}`

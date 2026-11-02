@@ -1,0 +1,1 @@
+export const FACILITY_OPTIONS = ["WiFi", "Meals", "Parking", "AC", "Hot water", "Furnished", "Laundry", "Study desk"]
