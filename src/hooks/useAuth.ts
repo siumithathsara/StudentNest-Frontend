@@ -8,8 +8,8 @@ export const useAuth = () => {
   const dispatch = useAppDispatch()
   const { user, initialized, submitting, error } = useAppSelector((s) => s.auth)
 
-  const login = useCallback(
-    (email: string, password: string) => dispatch(loginThunk({ email, password })),
+    const login = useCallback(
+    (email: string, password: string, remember: boolean) => dispatch(loginThunk({ email, password, remember })),
     [dispatch]
   )
 

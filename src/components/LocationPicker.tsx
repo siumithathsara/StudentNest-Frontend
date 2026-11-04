@@ -5,6 +5,7 @@ import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-lea
 import { reversePlace, searchPlaces } from "../service/geo"
 import type { PlaceResult } from "../types"
 import { getErrorMessage } from "../util/errors"
+import { inSriLanka, parseLocationInput } from "../util/geo"
 import { inputClass } from "../util/styles"
 
 export type LatLng = { lat: number; lng: number }
@@ -24,7 +25,6 @@ const pinIcon = L.divIcon({
   iconAnchor: [17, 44]
 })
 
-
 const ClickHandler = ({ onPick }: { onPick: (pos: LatLng) => void }) => {
   const timer = useRef<number | undefined>(undefined)
 
@@ -41,7 +41,6 @@ const ClickHandler = ({ onPick }: { onPick: (pos: LatLng) => void }) => {
   return null
 }
 
-
 const FlyTo = ({ target }: { target: LatLng | null }) => {
   const map = useMap()
   useEffect(() => {
@@ -50,13 +49,38 @@ const FlyTo = ({ target }: { target: LatLng | null }) => {
   return null
 }
 
-
 const ResizeFix = ({ trigger }: { trigger: boolean }) => {
   const map = useMap()
   useEffect(() => {
     const t = setTimeout(() => map.invalidateSize(), 150)
     return () => clearTimeout(t)
   }, [trigger, map])
+  return null
+}
+
+const MapGestures = ({ expanded }: { expanded: boolean }) => {
+  const map = useMap()
+
+  useEffect(() => {
+    if (expanded || !L.Browser.mobile) map.dragging.enable()
+    else map.dragging.disable()
+  }, [expanded, map])
+
+  useEffect(() => {
+    const el = map.getContainer()
+    let last = 0
+    const onWheel = (e: WheelEvent) => {
+      if (!expanded && !e.ctrlKey) return
+      e.preventDefault()
+      const now = Date.now()
+      if (now - last < 120) return
+      last = now
+      map.setZoomAround(map.mouseEventToContainerPoint(e), map.getZoom() + (e.deltaY < 0 ? 1 : -1))
+    }
+    el.addEventListener("wheel", onWheel, { passive: false })
+    return () => el.removeEventListener("wheel", onWheel)
+  }, [expanded, map])
+
   return null
 }
 
@@ -68,7 +92,6 @@ const LocationPicker = ({ value, onChange }: Props) => {
   const [flyTo, setFlyTo] = useState<LatLng | null>(null)
   const [expanded, setExpanded] = useState(false)
   const requestId = useRef(0)
-
 
   useEffect(() => {
     if (!expanded) return
@@ -82,7 +105,6 @@ const LocationPicker = ({ value, onChange }: Props) => {
     }
   }, [expanded])
 
-
   const pick = async (pos: LatLng) => {
     const id = ++requestId.current
     onChange(pos)
@@ -90,22 +112,46 @@ const LocationPicker = ({ value, onChange }: Props) => {
       const r = await reversePlace(pos.lat, pos.lng)
       if (id === requestId.current) onChange(pos, { address: r.address, city: r.city })
     } catch {
-  
+    
     }
   }
 
   const search = async () => {
-    if (query.trim().length < 3) {
+    const text = query.trim()
+    if (text.length < 3) {
       setMessage("Type at least 3 characters to search.")
       return
     }
+
+    const parsed = parseLocationInput(text)
+    if (parsed) {
+      const pos = inSriLanka(parsed.lat, parsed.lng)
+        ? parsed
+        : inSriLanka(parsed.lng, parsed.lat) 
+          ? { lat: parsed.lng, lng: parsed.lat }
+          : null
+      if (!pos) {
+        setMessage("Those coordinates are outside Sri Lanka.")
+        return
+      }
+      setResults([])
+      setMessage("")
+      setFlyTo(pos)
+      pick(pos)
+      return
+    }
+
     setSearching(true)
     setMessage("")
     setResults([])
     try {
-      const found = await searchPlaces(query.trim())
+      const found = await searchPlaces(text)
       setResults(found)
-      if (found.length === 0) setMessage("No places found. Try another name, or click on the map.")
+      if (found.length === 0) {
+        setMessage(
+          "Not found. Try a shorter name or add the city (e.g. “ICBT Kandy”). You can also paste a Google Maps link or coordinates, or zoom the map and click the exact spot."
+        )
+      }
     } catch (err) {
       setMessage(getErrorMessage(err))
     } finally {
@@ -115,7 +161,7 @@ const LocationPicker = ({ value, onChange }: Props) => {
 
   const choose = (p: PlaceResult) => {
     const pos = { lat: p.lat, lng: p.lng }
-    requestId.current++
+    requestId.current++ 
     setResults([])
     setFlyTo(pos)
     onChange(pos, { name: p.name.split(",")[0], address: p.name, city: p.city })
@@ -141,11 +187,10 @@ const LocationPicker = ({ value, onChange }: Props) => {
 
   return (
     <div>
-      
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
           className={inputClass}
-          placeholder="Search a place, e.g. University of Colombo"
+          placeholder="Search a place, or paste a Google Maps link / coordinates"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
@@ -193,10 +238,11 @@ const LocationPicker = ({ value, onChange }: Props) => {
         </ul>
       )}
 
+     
       <div className={expanded ? "fixed inset-0 z-50 flex flex-col bg-nest-950 p-3" : "relative z-0 mt-3"}>
         {expanded && (
           <div className="mb-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-sand-100">Click to place the pin. Double-tap, scroll or pinch to zoom.</p>
+            <p className="text-sm text-sand-100">Drag to move, scroll or pinch to zoom, click to place the pin.</p>
             <button
               type="button"
               onClick={() => setExpanded(false)}
@@ -222,7 +268,7 @@ const LocationPicker = ({ value, onChange }: Props) => {
           <MapContainer
             center={[center.lat, center.lng]}
             zoom={value ? 15 : 12}
-            scrollWheelZoom={expanded}
+            scrollWheelZoom={false}
             className={expanded ? "h-full w-full" : "h-72 w-full sm:h-96"}
           >
             <TileLayer
@@ -232,6 +278,7 @@ const LocationPicker = ({ value, onChange }: Props) => {
             <ClickHandler onPick={pick} />
             <FlyTo target={flyTo} />
             <ResizeFix trigger={expanded} />
+            <MapGestures expanded={expanded} />
             {value && (
               <Marker
                 position={[value.lat, value.lng]}
@@ -255,7 +302,7 @@ const LocationPicker = ({ value, onChange }: Props) => {
           : "No location selected yet. Search for a place, click on the map, or use your location."}
       </p>
       <p className="mt-1 text-xs text-nest-300/80">
-        Tip: use the + / − buttons, double-tap, or pinch to zoom. Press “Expand map” for a bigger view.
+        Laptop: hold Ctrl and scroll to zoom. Phone: pinch to zoom, and tap “Expand map” to move around freely.
       </p>
     </div>
   )

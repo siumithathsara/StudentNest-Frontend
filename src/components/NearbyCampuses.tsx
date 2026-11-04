@@ -58,7 +58,9 @@ const NearbyCampuses = ({ position }: { position: LatLng | null }) => {
         <ul className="mt-3 space-y-2">
           {items.map((c) => (
             <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-nest-800 px-3 py-2 text-sm">
-              <span className="font-medium text-sand-100">{c.name}</span>
+                            <span className="font-medium text-sand-100">
+                {c.name} <span className="font-normal text-nest-300">({c.city})</span>
+              </span>
               <span className="text-nest-300">
                 {c.distanceKm} km · ~{c.walkMinutes} min walk · ~{c.vehicleMinutes} min by vehicle
               </span>

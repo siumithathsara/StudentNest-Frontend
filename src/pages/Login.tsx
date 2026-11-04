@@ -8,6 +8,7 @@ const Login = () => {
   const { user, submitting, error, login, clearError } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [remember, setRemember] = useState(false)
 
   useEffect(() => {
     clearError()
@@ -17,7 +18,7 @@ const Login = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    login(email, password)
+    login(email, password, remember)
   }
 
   return (
@@ -66,6 +67,15 @@ const Login = () => {
             required
           />
         </div>
+          <label className="flex items-center gap-2 text-sm text-nest-100">
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+            className="h-4 w-4 accent-sand-400"
+          />
+          Keep me signed in on this device
+        </label>
         <button type="submit" disabled={submitting} className={primaryButtonClass}>
           {submitting ? "Logging in..." : "Log in"}
         </button>

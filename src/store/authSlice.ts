@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { getMyDetails, login as loginRequest } from "../service/auth"
 import type { User } from "../types"
 import { getErrorMessage } from "../util/errors"
-import { clearTokens, saveTokens } from "../util/storage"
+import { clearTokens, getAccessToken, saveTokens } from "../util/storage"
 
 interface AuthState {
   user: User | null
@@ -18,21 +18,22 @@ const initialState: AuthState = {
   error: null
 }
 
-export const login = createAsyncThunk<User, { email: string; password: string }, { rejectValue: string }>(
-  "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const res = await loginRequest(email, password)
-      saveTokens(res.data.accessToken, res.data.refreshToken)
-      return res.data.user as User
-    } catch (err) {
-      return rejectWithValue(getErrorMessage(err))
-    }
+export const login = createAsyncThunk<
+  User,
+  { email: string; password: string; remember: boolean },
+  { rejectValue: string }
+>("auth/login", async ({ email, password, remember }, { rejectWithValue }) => {
+  try {
+    const res = await loginRequest(email, password)
+    saveTokens(res.data.accessToken, res.data.refreshToken, remember)
+    return res.data.user as User
+  } catch (err) {
+    return rejectWithValue(getErrorMessage(err))
   }
-)
+})
 
 export const restoreSession = createAsyncThunk("auth/restore", async (): Promise<User | null> => {
-  if (!localStorage.getItem("ACCESS_TOKEN")) return null
+     if (!getAccessToken()) return null
   try {
     const res = await getMyDetails()
     return res.data as User
