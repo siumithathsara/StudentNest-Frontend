@@ -32,10 +32,10 @@ export const navItems: Record<Role, NavItem[]> = {
     { to: "/owner/boardings", label: "My boardings", icon: BuildingIcon},
     { to: "/owner/bookings", label: "Booking requests", icon: CalendarIcon, soon: true }
   ],
-  STUDENT: [
+   STUDENT: [
     { to: "/", label: "Home", icon: HomeIcon, end: true },
-    { to: "/boardings", label: "Find a boarding", icon: SearchIcon, soon: true },
+    { to: "/boardings", label: "Find a boarding", icon: SearchIcon },
     { to: "/bookings", label: "My bookings", icon: CalendarIcon, soon: true },
-    { to: "/favorites", label: "Favorites", icon: HeartIcon, soon: true }
+    { to: "/favorites", label: "Favorites", icon: HeartIcon }
   ]
 }

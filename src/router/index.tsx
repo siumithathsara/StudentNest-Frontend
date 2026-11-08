@@ -11,6 +11,10 @@ import AdminBoardings from "../pages/AdminBoardings"
 import AdminCampuses from "../pages/AdminCampuses"
 import BoardingForm from "../pages/BoardingForm"
 import MyBoardings from "../pages/MyBoardings"
+import BoardingDetail from "../pages/BoardingDetail"
+import Boardings from "../pages/Boardings"
+import Compare from "../pages/Compare"
+import Favorites from "../pages/Favorites"
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -110,6 +114,39 @@ function Router() {
           element={
             <RequireAuth roles={["OWNER"]}>
               <BoardingForm />
+            </RequireAuth>
+          }
+        />
+
+                <Route
+          path="/boardings"
+          element={
+            <RequireAuth roles={["STUDENT"]}>
+              <Boardings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/boardings/:id"
+          element={
+            <RequireAuth roles={["STUDENT"]}>
+              <BoardingDetail />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <RequireAuth roles={["STUDENT"]}>
+              <Favorites />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/compare"
+          element={
+            <RequireAuth roles={["STUDENT"]}>
+              <Compare />
             </RequireAuth>
           }
         />

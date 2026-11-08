@@ -9,7 +9,7 @@ const hero = {
     title: "Find a boarding near your campus",
     text: "Search approved boardings, see the distance and travel time to your campus, and request a room.",
     cta: "Search boardings",
-    to: null as string | null 
+    to: "/boardings" as string | null
   },
   OWNER: {
     label: "For boarding owners",
@@ -26,9 +26,9 @@ const cards = {
     { title: "Booking requests", text: "Approve or reject requests from students.", to: null as string | null }
   ],
   STUDENT: [
-    { title: "Find a boarding", text: "Search near your campus with distance and travel time.", to: null as string | null },
+    { title: "Find a boarding", text: "Search near your campus with distance and travel time.", to: "/boardings" as string | null},
     { title: "My bookings", text: "Track the requests you have sent.", to: null as string | null },
-    { title: "Favorites", text: "Save the boardings you like and compare them.", to: null as string | null }
+    { title: "Favorites", text: "Save the boardings you like and compare them.", to:"/favorites" as string | null }
   ]
 }
 

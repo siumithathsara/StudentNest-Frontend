@@ -3,6 +3,8 @@ import { clearError as clearErrorAction, login as loginThunk, logout as logoutAc
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { clearTokens } from "../util/storage"
 import { resetNotifications } from "../store/notificationSlice"
+import { clearCompare } from "../store/compareSlice"
+import { resetFavorites } from "../store/favoriteSlice"
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -16,6 +18,8 @@ export const useAuth = () => {
   const logout = useCallback(() => {
     clearTokens()
     dispatch(resetNotifications())
+    dispatch(resetFavorites())
+    dispatch(clearCompare())
     dispatch(logoutAction())
   }, [dispatch])
 

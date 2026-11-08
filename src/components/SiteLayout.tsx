@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import Logo from "./Logo"
 import SiteNavbar from "./SiteNavbar"
+import CompareTray from "./CompareTray"
 
 const SiteLayout = ({ children }: { children: ReactNode }) => (
   <div className="flex min-h-dvh flex-col">
@@ -14,6 +15,7 @@ const SiteLayout = ({ children }: { children: ReactNode }) => (
         <p>Find your boarding near campus.</p>
         <p>© {new Date().getFullYear()} StudentNest</p>
       </div>
+          <CompareTray />
     </footer>
   </div>
 )
