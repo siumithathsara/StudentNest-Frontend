@@ -15,6 +15,8 @@ import BoardingDetail from "../pages/BoardingDetail"
 import Boardings from "../pages/Boardings"
 import Compare from "../pages/Compare"
 import Favorites from "../pages/Favorites"
+import MyBookings from "../pages/MyBookings"
+import OwnerBookings from "../pages/OwnerBookings"
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -76,7 +78,7 @@ function Router() {
             </RequireAuth>
           }
         />
-                <Route
+        <Route
           path="/admin/boardings"
           element={
             <RequireAuth roles={["ADMIN"]}>
@@ -118,7 +120,16 @@ function Router() {
           }
         />
 
-                <Route
+        <Route
+          path="/owner/bookings"
+          element={
+            <RequireAuth roles={["OWNER"]}>
+              <OwnerBookings />
+            </RequireAuth>
+          }
+        />
+
+        <Route
           path="/boardings"
           element={
             <RequireAuth roles={["STUDENT"]}>
@@ -147,6 +158,15 @@ function Router() {
           element={
             <RequireAuth roles={["STUDENT"]}>
               <Compare />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/bookings"
+          element={
+            <RequireAuth roles={["STUDENT"]}>
+              <MyBookings />
             </RequireAuth>
           }
         />

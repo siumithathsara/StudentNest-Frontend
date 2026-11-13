@@ -23,12 +23,12 @@ const hero = {
 const cards = {
   OWNER: [
     { title: "My boardings", text: "Add and manage your boarding listings.", to: "/owner/boardings" as string | null },
-    { title: "Booking requests", text: "Approve or reject requests from students.", to: null as string | null }
+    { title: "Booking requests", text: "Approve or reject requests from students.", to: "/owner/bookings" as string | null }
   ],
   STUDENT: [
-    { title: "Find a boarding", text: "Search near your campus with distance and travel time.", to: "/boardings" as string | null},
-    { title: "My bookings", text: "Track the requests you have sent.", to: null as string | null },
-    { title: "Favorites", text: "Save the boardings you like and compare them.", to:"/favorites" as string | null }
+    { title: "Find a boarding", text: "Search near your campus with distance and travel time.", to: "/boardings" as string | null },
+    { title: "My bookings", text: "Track the requests you have sent.", to: "/bookings" as string | null },
+    { title: "Favorites", text: "Save the boardings you like and compare them.", to: "/favorites" as string | null }
   ]
 }
 
@@ -47,7 +47,7 @@ const Home = () => {
         Welcome back, <span className="font-semibold text-sand-100">{user.name}</span>.
       </p>
 
-   
+
       <section className="mt-4 overflow-hidden rounded-3xl bg-nest-800">
         <div className="grid items-center gap-6 p-6 sm:p-10 lg:grid-cols-2">
           <div>
@@ -83,7 +83,7 @@ const Home = () => {
         </div>
       </section>
 
-   
+
       <h2 className="mt-10 text-xl font-bold text-sand-100">What you can do here</h2>
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards[user.role].map((c) => {

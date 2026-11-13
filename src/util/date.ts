@@ -7,3 +7,6 @@ export const timeAgo = (iso: string) => {
   if (hours < 24) return `${hours} h ago`
   return `${Math.floor(hours / 24)} d ago`
 }
+
+export const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })

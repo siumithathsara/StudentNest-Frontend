@@ -51,6 +51,7 @@ export interface AdminStats {
     owners: number
   }
   boardings: { total: number; pending: number; approved: number; rejected: number }
+  bookings: { total: number; pending: number; approved: number }
   campuses: number
 }
 
@@ -153,4 +154,67 @@ export interface BoardingDetail {
   selectedCampus: NearbyCampus | null
   isFavorite: boolean
   contactVisible: boolean
+  myBooking: { id: string; status: BookingStatus; moveInDate: string } | null
+  requestBlockedReason: string | null
+  contact: BookingContact | null
+}
+export type BookingStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED"
+
+export interface BookingContact {
+  ownerName: string | null
+  phone: string | null
+  email: string | null
+  address: string
+  lat: number
+  lng: number
+}
+
+export interface MyBooking {
+  id: string
+  status: BookingStatus
+  moveInDate: string
+  message: string | null
+  reason: string | null
+  createdAt: string
+  decidedAt: string | null
+  boarding: { id: string; title: string; city: string; monthlyRent: number; coverImage: string | null } | null
+  contact: BookingContact | null
+}
+
+export interface ReceivedBooking {
+  id: string
+  status: BookingStatus
+  moveInDate: string
+  message: string | null
+  reason: string | null
+  createdAt: string
+  decidedAt: string | null
+  student: { name: string; email: string } | null
+  boarding: {
+    id: string
+    title: string
+    city: string
+    availableRooms: number
+    totalRooms: number
+    coverImage: string | null
+  } | null
+}
+
+export interface BookingList<T> {
+  items: T[]
+  total: number
+  page: number
+  limit: number
+}
+
+export interface BookingCounts {
+  PENDING: number
+  APPROVED: number
+  REJECTED: number
+  CANCELLED: number
+  all: number
+}
+
+export interface ReceivedBookingList extends BookingList<ReceivedBooking> {
+  counts: BookingCounts
 }

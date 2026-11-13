@@ -22,7 +22,7 @@ const AdminPage = () => {
     let active = true
 
     const load = async () => {
-    
+
       const [s, p, a] = await Promise.allSettled([
         getStats(),
         getUsers({ status: "PENDING_APPROVAL", page: 1, limit: 5 }),
@@ -58,16 +58,17 @@ const AdminPage = () => {
     { label: "Approved users", value: u?.approved, to: "/admin/users?status=APPROVED" },
     { label: "Approved boardings", value: b?.approved, to: "/admin/boardings?status=APPROVED" },
     { label: "Campuses", value: stats?.campuses, to: "/admin/campuses" },
+    { label: "Bookings (pending / approved)", value: stats?.bookings ? `${stats.bookings.pending} / ${stats.bookings.approved}` : undefined },
     { label: "Students / Owners", value: u ? `${u.students} / ${u.owners}` : undefined }
   ]
 
   const segments = u
     ? [
-        { label: "Approved", value: u.approved, cls: "bg-nest-600" },
-        { label: "Pending", value: u.pending, cls: "bg-sand-400" },
-        { label: "Rejected", value: u.rejected, cls: "bg-red-400" },
-        { label: "Suspended", value: u.suspended, cls: "bg-slate-400" }
-      ]
+      { label: "Approved", value: u.approved, cls: "bg-nest-600" },
+      { label: "Pending", value: u.pending, cls: "bg-sand-400" },
+      { label: "Rejected", value: u.rejected, cls: "bg-red-400" },
+      { label: "Suspended", value: u.suspended, cls: "bg-slate-400" }
+    ]
     : []
 
   return (
@@ -129,7 +130,7 @@ const AdminPage = () => {
       )}
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-       
+
         <section className={card} aria-label="Waiting for approval">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Users waiting for approval</h2>

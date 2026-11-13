@@ -29,13 +29,13 @@ export const navItems: Record<Role, NavItem[]> = {
   ],
   OWNER: [
     { to: "/", label: "Home", icon: HomeIcon, end: true },
-    { to: "/owner/boardings", label: "My boardings", icon: BuildingIcon},
-    { to: "/owner/bookings", label: "Booking requests", icon: CalendarIcon, soon: true }
+    { to: "/owner/boardings", label: "My boardings", icon: BuildingIcon },
+    { to: "/owner/bookings", label: "Booking requests", icon: CalendarIcon }
   ],
-   STUDENT: [
+  STUDENT: [
     { to: "/", label: "Home", icon: HomeIcon, end: true },
     { to: "/boardings", label: "Find a boarding", icon: SearchIcon },
-    { to: "/bookings", label: "My bookings", icon: CalendarIcon, soon: true },
+    { to: "/bookings", label: "My bookings", icon: CalendarIcon },
     { to: "/favorites", label: "Favorites", icon: HeartIcon }
   ]
 }
