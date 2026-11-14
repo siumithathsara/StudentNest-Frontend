@@ -218,3 +218,20 @@ export interface BookingCounts {
 export interface ReceivedBookingList extends BookingList<ReceivedBooking> {
   counts: BookingCounts
 }
+
+export interface ChatMessage {
+  id: string
+  role: "user" | "bot"
+  text: string
+  boardings?: BoardingSummary[]
+  campus?: { id: string; name: string } | null
+  suggestions?: string[]
+  isError?: boolean
+}
+
+export interface ChatReply {
+  reply: string
+  boardings: BoardingSummary[]
+  campus: { id: string; name: string } | null
+  suggestions?: string[]
+}

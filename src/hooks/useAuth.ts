@@ -5,12 +5,13 @@ import { clearTokens } from "../util/storage"
 import { resetNotifications } from "../store/notificationSlice"
 import { clearCompare } from "../store/compareSlice"
 import { resetFavorites } from "../store/favoriteSlice"
+import { resetChat } from "../store/chatSlice"
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
   const { user, initialized, submitting, error } = useAppSelector((s) => s.auth)
 
-    const login = useCallback(
+  const login = useCallback(
     (email: string, password: string, remember: boolean) => dispatch(loginThunk({ email, password, remember })),
     [dispatch]
   )
@@ -20,6 +21,7 @@ export const useAuth = () => {
     dispatch(resetNotifications())
     dispatch(resetFavorites())
     dispatch(clearCompare())
+    dispatch(resetChat())
     dispatch(logoutAction())
   }, [dispatch])
 
@@ -30,7 +32,7 @@ export const useAuth = () => {
   return {
     user,
     loading: !initialized,
-    submitting, 
+    submitting,
     error,
     login,
     logout,

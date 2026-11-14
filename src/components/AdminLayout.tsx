@@ -3,6 +3,7 @@ import AdminSidebar from "./AdminSidebar"
 import { MenuIcon } from "./icons"
 import NotificationBell from "./NotificationBell"
 import UserMenu from "./UserMenu"
+import ChatWidget from "./ChatWidget"
 
 type AdminLayoutProps = {
   title: string
@@ -17,7 +18,7 @@ const AdminLayout = ({ title, children }: AdminLayoutProps) => {
       <AdminSidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       <div className="lg:pl-64">
-       
+
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-nest-600 bg-nest-800 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <button
@@ -38,6 +39,7 @@ const AdminLayout = ({ title, children }: AdminLayoutProps) => {
 
         <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">{children}</main>
       </div>
+      <ChatWidget />
     </div>
   )
 }

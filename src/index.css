@@ -19,3 +19,18 @@ body {
   background-color: var(--color-nest-700);
   color: var(--color-sand-100);
 }
+
+@keyframes chat-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes chat-dot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+.chat-pop { animation: chat-pop 0.2s ease-out; }
+.chat-dot { animation: chat-dot 1.2s infinite ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-pop, .chat-dot { animation: none; }
+}

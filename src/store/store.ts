@@ -3,13 +3,15 @@ import authReducer from "./authSlice"
 import compareReducer from "./compareSlice"
 import favoriteReducer from "./favoriteSlice"
 import notificationReducer from "./notificationSlice"
+import chatReducer from "./chatSlice"
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     notifications: notificationReducer,
     favorites: favoriteReducer,
-    compare: compareReducer
+    compare: compareReducer,
+    chat: chatReducer
   }
 })
 
