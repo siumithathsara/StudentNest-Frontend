@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { Link, Navigate } from "react-router-dom"
 import AuthLayout from "../components/AuthLayout"
+import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../hooks/useAuth"
 import { inputClass, labelClass, primaryButtonClass } from "../util/styles"
 
@@ -42,7 +43,9 @@ const Login = () => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div>
-          <label htmlFor="email" className={labelClass}>Email</label>
+          <label htmlFor="email" className={labelClass}>
+            Email
+          </label>
           <input
             id="email"
             type="email"
@@ -55,19 +58,19 @@ const Login = () => {
           />
         </div>
         <div>
-          <label htmlFor="password" className={labelClass}>Password</label>
-          <input
+          <label htmlFor="password" className={labelClass}>
+            Password
+          </label>
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="current-password"
             placeholder="Your password"
-            className={inputClass}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
             required
           />
         </div>
-          <label className="flex items-center gap-2 text-sm text-nest-100">
+        <label className="flex items-center gap-2 text-sm text-nest-100">
           <input
             type="checkbox"
             checked={remember}

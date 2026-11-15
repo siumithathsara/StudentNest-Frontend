@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react"
 import { Link, Navigate } from "react-router-dom"
 import AuthLayout from "../components/AuthLayout"
+import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../hooks/useAuth"
 import { register } from "../service/auth"
 import { getErrorMessage } from "../util/errors"
@@ -11,6 +12,7 @@ type AccountType = "STUDENT" | "OWNER"
 const Register = () => {
   const { user } = useAuth()
   const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" })
+  const [confirmPassword, setConfirmPassword] = useState("") 
   const [role, setRole] = useState<AccountType>("STUDENT")
   const [error, setError] = useState("")
   const [done, setDone] = useState("")
@@ -20,9 +22,17 @@ const Register = () => {
 
   const update = (field: keyof typeof form, value: string) => setForm((f) => ({ ...f, [field]: value }))
 
+  const mismatch = confirmPassword.length > 0 && confirmPassword !== form.password
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError("")
+
+    if (form.password !== confirmPassword) {
+      setError("Passwords do not match.")
+      return
+    }
+
     setSubmitting(true)
     try {
       const res = await register({
@@ -39,7 +49,6 @@ const Register = () => {
       setSubmitting(false)
     }
   }
-
 
   if (done) {
     return (
@@ -91,22 +100,81 @@ const Register = () => {
         </div>
 
         <div>
-          <label htmlFor="name" className={labelClass}>Full name</label>
-          <input id="name" autoComplete="name" className={inputClass} value={form.name} onChange={(e) => update("name", e.target.value)} required />
+          <label htmlFor="name" className={labelClass}>
+            Full name
+          </label>
+          <input
+            id="name"
+            autoComplete="name"
+            className={inputClass}
+            value={form.name}
+            onChange={(e) => update("name", e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label htmlFor="email" className={labelClass}>Email</label>
-          <input id="email" type="email" autoComplete="email" placeholder="name@example.com" className={inputClass} value={form.email} onChange={(e) => update("email", e.target.value)} required />
+          <label htmlFor="email" className={labelClass}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="name@example.com"
+            className={inputClass}
+            value={form.email}
+            onChange={(e) => update("email", e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label htmlFor="password" className={labelClass}>Password</label>
-          <input id="password" type="password" autoComplete="new-password" className={inputClass} value={form.password} onChange={(e) => update("password", e.target.value)} required />
-          <p className="mt-1.5 text-xs text-nest-300">At least 8 characters, with a letter and a number.</p>
+          <label htmlFor="password" className={labelClass}>
+            Password
+          </label>
+          <PasswordInput
+            id="password"
+            autoComplete="new-password"
+            value={form.password}
+            onChange={(v) => update("password", v)}
+            describedBy="password-hint"
+            required
+          />
+          <p id="password-hint" className="mt-1.5 text-xs text-nest-300">
+            At least 8 characters, with a letter and a number.
+          </p>
+        </div>
+        <div>
+          <label htmlFor="confirm-password" className={labelClass}>
+            Confirm password
+          </label>
+          <PasswordInput
+            id="confirm-password"
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            describedBy={mismatch ? "confirm-error" : undefined}
+            required
+          />
+          {mismatch && (
+            <p id="confirm-error" role="alert" className="mt-1.5 text-xs text-red-300">
+              Passwords do not match.
+            </p>
+          )}
         </div>
         {role === "OWNER" && (
           <div>
-            <label htmlFor="phone" className={labelClass}>Phone number</label>
-            <input id="phone" type="tel" autoComplete="tel" className={inputClass} value={form.phone} onChange={(e) => update("phone", e.target.value)} required />
+            <label htmlFor="phone" className={labelClass}>
+              Phone number
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              autoComplete="tel"
+              className={inputClass}
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+              required
+            />
           </div>
         )}
 
