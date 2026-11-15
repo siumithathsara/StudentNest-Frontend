@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import AppLayout from "../components/AppLayout"
 import BoardingCard from "../components/BoardingCard"
 import { FiltersIcon } from "../components/icons"
@@ -6,7 +7,7 @@ import { useFavoriteIds } from "../hooks/useFavorites"
 import { browseBoardings } from "../service/browse"
 import { getCampuses } from "../service/campus"
 import type { BrowseResult, Campus } from "../types"
-import { getSavedCampus, saveCampus } from "../util/campusPref"
+import { getSavedCampus, saveCampus, validCampusId } from "../util/campusPref"
 import { getErrorMessage } from "../util/errors"
 import { FACILITY_OPTIONS } from "../util/facilities"
 import { inputClass, labelClass } from "../util/styles"
@@ -22,14 +23,23 @@ const SORTS = [
 
 const Boardings = () => {
   useFavoriteIds()
+  const [params] = useSearchParams()
+  const [initial] = useState(() => {
+    const rent = params.get("maxRent") ?? ""
+    return {
+      campus: validCampusId(params.get("campus")) ?? getSavedCampus(),
+      maxRent: /^\d+$/.test(rent) ? rent : "",
+      facilities: (params.get("facilities") ?? "").split(",").filter((f) => FACILITY_OPTIONS.includes(f))
+    }
+  })
 
   const [campuses, setCampuses] = useState<Campus[]>([])
   const [campusesLoaded, setCampusesLoaded] = useState(false)
   const [campusId, setCampusId] = useState("")
   const [radiusKm, setRadiusKm] = useState(5)
   const [minRent, setMinRent] = useState("")
-  const [maxRent, setMaxRent] = useState("")
-  const [facilities, setFacilities] = useState<string[]>([])
+  const [maxRent, setMaxRent] = useState(initial.maxRent) 
+  const [facilities, setFacilities] = useState<string[]>(initial.facilities) 
   const [availableOnly, setAvailableOnly] = useState(false)
   const [sort, setSort] = useState("distance")
   const [page, setPage] = useState(1)
@@ -45,7 +55,7 @@ const Boardings = () => {
       .then((list) => {
         if (!active) return
         setCampuses(list)
-        const saved = getSavedCampus()
+        const saved = initial.campus
         setCampusId(list.find((c) => c.id === saved)?.id ?? list[0]?.id ?? "")
       })
       .catch((err) => active && setError(getErrorMessage(err)))
@@ -55,7 +65,7 @@ const Boardings = () => {
     return () => {
       active = false
     }
-  }, [])
+  }, [initial]) // NEW
 
   useEffect(() => {
     if (!campusesLoaded) return
@@ -134,10 +144,14 @@ const Boardings = () => {
       </button>
 
       <div className="mt-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-6">
-      
-        <aside className={`${filtersOpen ? "block" : "hidden"} rounded-2xl bg-nest-800 p-5 lg:sticky lg:top-24 lg:block`} aria-label="Filters">
+        <aside
+          className={`${filtersOpen ? "block" : "hidden"} rounded-2xl bg-nest-800 p-5 lg:sticky lg:top-24 lg:block`}
+          aria-label="Filters"
+        >
           <div>
-            <label htmlFor="campus" className={labelClass}>Your campus</label>
+            <label htmlFor="campus" className={labelClass}>
+              Your campus
+            </label>
             <select id="campus" className={inputClass} value={campusId} onChange={(e) => chooseCampus(e.target.value)}>
               {campuses.length === 0 && <option value="">No campuses yet</option>}
               {campuses.length > 0 && <option value="">Any (no distances)</option>}
@@ -171,7 +185,9 @@ const Boardings = () => {
 
           <div className="mt-5 grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="min-rent" className={labelClass}>Min rent</label>
+              <label htmlFor="min-rent" className={labelClass}>
+                Min rent
+              </label>
               <input
                 id="min-rent"
                 type="number"
@@ -186,7 +202,9 @@ const Boardings = () => {
               />
             </div>
             <div>
-              <label htmlFor="max-rent" className={labelClass}>Max rent</label>
+              <label htmlFor="max-rent" className={labelClass}>
+                Max rent
+              </label>
               <input
                 id="max-rent"
                 type="number"
@@ -237,7 +255,11 @@ const Boardings = () => {
             Only boardings with free rooms
           </label>
 
-          <button type="button" onClick={clearFilters} className="mt-5 w-full rounded-xl border border-nest-300/40 py-2.5 text-sm font-semibold text-sand-100 hover:bg-nest-700">
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="mt-5 w-full rounded-xl border border-nest-300/40 py-2.5 text-sm font-semibold text-sand-100 hover:bg-nest-700"
+          >
             Clear filters
           </button>
         </aside>
@@ -252,7 +274,9 @@ const Boardings = () => {
                   : ""}
             </p>
             <div className="flex items-center gap-2">
-              <label htmlFor="sort" className="text-sm text-nest-300">Sort by</label>
+              <label htmlFor="sort" className="text-sm text-nest-300">
+                Sort by
+              </label>
               <select
                 id="sort"
                 className={`${inputClass} w-auto py-2`}
@@ -296,10 +320,18 @@ const Boardings = () => {
                 Page {page} of {pages}
               </span>
               <div className="flex gap-2">
-                <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-xl border border-nest-300/40 px-4 py-2 disabled:opacity-40">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                  className="rounded-xl border border-nest-300/40 px-4 py-2 disabled:opacity-40"
+                >
                   Previous
                 </button>
-                <button disabled={page >= pages} onClick={() => setPage((p) => p + 1)} className="rounded-xl border border-nest-300/40 px-4 py-2 disabled:opacity-40">
+                <button
+                  disabled={page >= pages}
+                  onClick={() => setPage((p) => p + 1)}
+                  className="rounded-xl border border-nest-300/40 px-4 py-2 disabled:opacity-40"
+                >
                   Next
                 </button>
               </div>

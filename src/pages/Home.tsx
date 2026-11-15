@@ -2,45 +2,21 @@ import { Link, Navigate } from "react-router-dom"
 import AppLayout from "../components/AppLayout"
 import AuthIllustration from "../components/AuthIllustration"
 import { useAuth } from "../hooks/useAuth"
+import StudentHome from "./StudentHome"
 
-const hero = {
-  STUDENT: {
-    label: "For students",
-    title: "Find a boarding near your campus",
-    text: "Search approved boardings, see the distance and travel time to your campus, and request a room.",
-    cta: "Search boardings",
-    to: "/boardings"
-  },
-  OWNER: {
-    label: "For boarding owners",
-    title: "List your boarding for students",
-    text: "Add your boarding with photos, get it approved, and receive booking requests from students.",
-    cta: "Add a boarding",
-    to: "/owner/boardings/new"
-  }
-}
-
-const cards = {
-  OWNER: [
-    { title: "My boardings", text: "Add and manage your boarding listings.", to: "/owner/boardings" },
-    { title: "Booking requests", text: "Approve or reject requests from students.", to: "/owner/bookings" }
-  ],
-  STUDENT: [
-    { title: "Find a boarding", text: "Search near your campus with distance and travel time.", to: "/boardings" },
-    { title: "My bookings", text: "Track the requests you have sent.", to: "/bookings" },
-    { title: "Favorites", text: "Save the boardings you like and compare them.", to: "/favorites" }
-  ]
-}
+const ownerCards = [
+  { title: "My boardings", text: "Add and manage your boarding listings.", to: "/owner/boardings" },
+  { title: "Booking requests", text: "Approve or reject requests from students.", to: "/owner/bookings" }
+]
 
 const Home = () => {
   const { user } = useAuth()
 
   if (!user) return null
-
   if (user.role === "ADMIN") return <Navigate to="/admin" replace />
+  if (user.role === "STUDENT") return <StudentHome />
 
-  const h = hero[user.role]
-
+  // owner
   return (
     <AppLayout>
       <p className="text-nest-300">
@@ -50,16 +26,20 @@ const Home = () => {
       <section className="mt-4 overflow-hidden rounded-3xl bg-nest-800">
         <div className="grid items-center gap-6 p-6 sm:p-10 lg:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-sand-400">{h.label}</p>
-            <h1 className="mt-2 text-3xl font-bold leading-tight text-sand-100 sm:text-4xl">{h.title}</h1>
-            <p className="mt-3 max-w-lg text-nest-300">{h.text}</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-sand-400">For boarding owners</p>
+            <h1 className="mt-2 text-3xl font-bold leading-tight text-sand-100 sm:text-4xl">
+              List your boarding for students
+            </h1>
+            <p className="mt-3 max-w-lg text-nest-300">
+              Add your boarding with photos, get it approved, and receive booking requests from students.
+            </p>
 
             <div className="mt-6">
               <Link
-                to={h.to}
+                to="/owner/boardings/new"
                 className="inline-block rounded-xl bg-sand-400 px-5 py-3 font-semibold text-nest-950 transition hover:bg-sand-500"
               >
-                {h.cta}
+                Add a boarding
               </Link>
             </div>
           </div>
@@ -72,7 +52,7 @@ const Home = () => {
 
       <h2 className="mt-10 text-xl font-bold text-sand-100">What you can do here</h2>
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards[user.role].map((c) => (
+        {ownerCards.map((c) => (
           <Link
             key={c.title}
             to={c.to}
