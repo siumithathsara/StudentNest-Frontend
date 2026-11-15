@@ -9,9 +9,10 @@ import type { Boarding, BoardingImage } from "../types"
 import { getErrorMessage } from "../util/errors"
 import { FACILITY_OPTIONS } from "../util/facilities"
 import { inputClass, labelClass, primaryButtonClass } from "../util/styles"
+import { compressImage } from "../util/compressImage"
 
 const MAX_IMAGES = 8
-const MAX_SIZE = 5 * 1024 * 1024
+const MAX_ORIGINAL_SIZE = 20 * 1024 * 1024
 const ALLOWED = ["image/jpeg", "image/png", "image/webp"]
 
 const section = "rounded-2xl bg-nest-800 p-5 sm:p-6"
@@ -89,7 +90,7 @@ const BoardingForm = () => {
   const toggleFacility = (name: string) =>
     setFacilities((list) => (list.includes(name) ? list.filter((f) => f !== name) : [...list, name]))
 
-  const addFiles = (list: FileList | null) => {
+   const addFiles = async (list: FileList | null) => {
     if (!list) return
     const problems: string[] = []
     const valid = Array.from(list).filter((f) => {
@@ -97,15 +98,17 @@ const BoardingForm = () => {
         problems.push(`${f.name}: only jpg, png or webp.`)
         return false
       }
-      if (f.size > MAX_SIZE) {
-        problems.push(`${f.name}: larger than 5MB.`)
+      if (f.size > MAX_ORIGINAL_SIZE) {
+        problems.push(`${f.name}: larger than 20MB.`)
         return false
       }
       return true
     })
     const room = Math.max(0, MAX_IMAGES - photoCount)
     if (valid.length > room) problems.push(`You can add only ${room} more photo(s) (max ${MAX_IMAGES}).`)
-    setFiles((prev) => [...prev, ...valid.slice(0, room)])
+
+    const compressed = await Promise.all(valid.slice(0, room).map(compressImage))
+    setFiles((prev) => [...prev, ...compressed])
     setPhotoError(problems.join(" "))
   }
 
