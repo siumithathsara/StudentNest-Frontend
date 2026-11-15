@@ -17,7 +17,6 @@ export type NavItem = {
   label: string
   icon: ComponentType<IconProps>
   end?: boolean
-  soon?: boolean // tempory one 
 }
 
 export const navItems: Record<Role, NavItem[]> = {

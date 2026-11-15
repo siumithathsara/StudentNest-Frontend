@@ -4,13 +4,12 @@ import Logo from "./Logo"
 import { navItems } from "./navItems"
 
 type AdminSidebarProps = {
-  open: boolean 
+  open: boolean
   onClose: () => void
 }
 
 const AdminSidebar = ({ open, onClose }: AdminSidebarProps) => (
   <>
-
     {open && <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={onClose} aria-hidden="true" />}
 
     <aside
@@ -37,21 +36,6 @@ const AdminSidebar = ({ open, onClose }: AdminSidebarProps) => (
 
         {navItems.ADMIN.map((item) => {
           const Icon = item.icon
-
-          if (item.soon) {
-            return (
-              <div
-                key={item.label}
-                aria-disabled="true"
-                className="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-nest-300/60"
-              >
-                <Icon />
-                <span className="flex-1">{item.label}</span>
-                <span className="rounded-full bg-nest-800 px-2 py-0.5 text-[11px] font-semibold text-nest-300">Soon</span>
-              </div>
-            )
-          }
-
           return (
             <NavLink
               key={item.label}

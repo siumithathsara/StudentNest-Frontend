@@ -21,31 +21,20 @@ const SiteNavbar = () => {
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
-            {items.map((item) =>
-              item.soon ? (
-                <span
-                  key={item.label}
-                  aria-disabled="true"
-                  className="flex cursor-not-allowed items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-nest-300/60"
-                >
-                  {item.label}
-                  <span className="rounded-full bg-nest-800 px-1.5 py-0.5 text-[10px] font-semibold text-nest-300">Soon</span>
-                </span>
-              ) : (
-                <NavLink
-                  key={item.label}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `rounded-lg px-3 py-2 text-sm font-medium transition ${
-                      isActive ? "bg-nest-700 text-sand-400" : "text-nest-100 hover:bg-nest-800"
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              )
-            )}
+            {items.map((item) => (
+              <NavLink
+                key={item.label}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  `rounded-lg px-3 py-2 text-sm font-medium transition ${
+                    isActive ? "bg-nest-700 text-sand-400" : "text-nest-100 hover:bg-nest-800"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </nav>
         </div>
 
@@ -67,17 +56,7 @@ const SiteNavbar = () => {
         <nav className="space-y-1 border-t border-nest-600 px-4 py-3 md:hidden" aria-label="Mobile">
           {items.map((item) => {
             const Icon = item.icon
-            return item.soon ? (
-              <div
-                key={item.label}
-                aria-disabled="true"
-                className="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-nest-300/60"
-              >
-                <Icon />
-                <span className="flex-1">{item.label}</span>
-                <span className="rounded-full bg-nest-800 px-2 py-0.5 text-[11px] font-semibold text-nest-300">Soon</span>
-              </div>
-            ) : (
+            return (
               <NavLink
                 key={item.label}
                 to={item.to}
