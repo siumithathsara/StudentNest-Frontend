@@ -17,6 +17,8 @@ import Compare from "../pages/Compare"
 import Favorites from "../pages/Favorites"
 import MyBookings from "../pages/MyBookings"
 import OwnerBookings from "../pages/OwnerBookings"
+import ForgotPassword from "../pages/ForgotPassword"
+import ResetPassword from "../pages/ResetPassword"
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -52,6 +54,8 @@ function Router() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route
           path="/"

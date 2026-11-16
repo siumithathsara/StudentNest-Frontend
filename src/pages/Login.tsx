@@ -57,7 +57,7 @@ const Login = () => {
             required
           />
         </div>
-        <div>
+                <div>
           <label htmlFor="password" className={labelClass}>
             Password
           </label>
@@ -69,6 +69,11 @@ const Login = () => {
             onChange={setPassword}
             required
           />
+          <div className="mt-2 text-right">
+            <Link to="/forgot-password" className="text-sm font-medium text-sand-400 hover:underline">
+              Forgot password?
+            </Link>
+          </div>
         </div>
         <label className="flex items-center gap-2 text-sm text-nest-100">
           <input
@@ -77,6 +82,7 @@ const Login = () => {
             onChange={(e) => setRemember(e.target.checked)}
             className="h-4 w-4 accent-sand-400"
           />
+          
           Keep me signed in on this device
         </label>
         <button type="submit" disabled={submitting} className={primaryButtonClass}>
