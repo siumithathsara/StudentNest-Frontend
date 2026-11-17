@@ -1,75 +1,34 @@
-# React + TypeScript + Vite
+# StudentNest 🏠
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Find a boarding near your campus.
 
-Currently, two official plugins are available:
+StudentNest is a web application that helps university students in Sri Lanka find boarding places (rented rooms) close to their campus. Students search by campus, see the distance and travel time, request a room, and get the owner's contact details after the owner approves. Boarding owners list their places with photos, and an admin approves every account and every listing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🔗 Live demo
 
-## React Compiler
+| | Link |
+|---|---|
+| Website (frontend) | https://student-nest-frontend-xi.vercel.app |
+| API (backend) | https://student-nest-backend-three.vercel.app/health |
+| Frontend repository |https://github.com/siumithathsara/StudentNest-Frontend.git |
+| Backend repository | https://github.com/siumithathsara/StudentNest-Backend.git |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 👤 About
 
-## Expanding the ESLint configuration
+- **Name:** Imakshi Siyumi Thathsara
+- **Module / Assignment:**ITS2020 - Rapid Application Development (RAD)   
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Tech stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+| Area | Technologies |
+|---|---|
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS 4, Redux Toolkit, React Router, Axios, Leaflet (maps) |
+| **Backend** | Node.js, Express 5, TypeScript |
+| **Database** | MongoDB Atlas with Mongoose (geospatial `2dsphere` index and `$geoNear` queries) |
+| **Authentication** | JWT (access + refresh tokens), bcrypt password hashing, role-based access (Student / Owner / Admin) |
+| **Validation and security** | Zod validation, Helmet, rate limiting, CORS allow-list |
+| **File storage** | Supabase Storage (boarding photos, uploaded with Multer) |
+| **AI** | Google Gemini API (chat assistant) |
+| **Email** | Nodemailer with Gmail SMTP |
+| **Maps and places** | OpenStreetMap (Nominatim place search through our own API), Leaflet |
+| **Hosting** | Vercel (frontend and backend), MongoDB Atlas, Supabase |
